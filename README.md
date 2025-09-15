@@ -22,7 +22,7 @@ All sample applications are working perfectly with the A2A Ruby gem:
 gem install a2a-ruby
 
 # Clone and setup samples
-git clone https://github.com/a2aproject/a2a-ruby-samples.git
+git clone https://github.com/traylinx/a2a-ruby-samples.git
 cd a2a-ruby-samples
 ./setup.sh
 ```
@@ -90,7 +90,7 @@ Practical weather service agent with real API integration
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/a2aproject/a2a-ruby-samples.git
+git clone https://github.com/traylinx/a2a-ruby-samples.git
 cd a2a-ruby-samples
 
 # 2. Run setup script
@@ -259,8 +259,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 **Support**
 
-- **Issues**: [GitHub Issues](https://github.com/a2aproject/a2a-ruby-samples/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/a2aproject/a2a-ruby-samples/discussions)
+- **Issues**: [GitHub Issues](https://github.com/traylinx/a2a-ruby-samples/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/traylinx/a2a-ruby-samples/discussions)
 - **Documentation**: [A2A Ruby SDK Docs](https://github.com/a2aproject/a2a-ruby/docs)
 
 ---
