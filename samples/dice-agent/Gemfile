@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 # A2A Ruby SDK - use local development version
-gem 'a2a-ruby', path: '../../../a2a-ruby'
+gem "a2a-ruby", path: "../../../a2a-ruby"
 
 # Web server
-gem 'puma', '~> 6.0'
+gem "puma", "~> 6.0"
 
 # Development and testing
 group :development, :test do
-  gem 'rspec', '~> 3.12'
-  gem 'webmock', '~> 3.18'
-  gem 'pry', '~> 0.14'
+  gem "pry", "~> 0.14"
+  gem "rspec", "~> 3.12"
+  gem "webmock", "~> 3.18"
 end
 
 # Optional: Better JSON performance
-gem 'oj', '~> 3.16'
+gem "oj", "~> 3.16"

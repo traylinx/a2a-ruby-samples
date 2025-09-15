@@ -1,0 +1,58 @@
+# RuboCop configuration for A2A Ruby samples
+# Simplified configuration for sample code
+
+AllCops:
+  TargetRubyVersion: 2.7
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+    - 'node_modules/**/*'
+
+# Layout and formatting
+Layout/LineLength:
+  Max: 120
+  AllowedPatterns: 
+    - '\A\s*#'  # Allow long comments
+    - 'https?://'  # Allow long URLs
+
+# Style rules
+Style/Documentation:
+  Enabled: false  # Samples don't need full documentation
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+# Metrics - more relaxed for samples
+Metrics/BlockLength:
+  Max: 50
+  Exclude:
+    - '**/*_spec.rb'
+
+Metrics/MethodLength:
+  Max: 25
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/AbcSize:
+  Max: 25
+
+# Naming conventions
+Naming/FileName:
+  Enabled: false  # Allow flexible naming for samples
+
+# Disable some cops that are too strict for sample code
+Style/GlobalVars:
+  Enabled: false
+
+Style/ClassVars:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
