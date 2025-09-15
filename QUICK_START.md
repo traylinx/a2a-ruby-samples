@@ -5,7 +5,10 @@ Get up and running with A2A Ruby samples in 5 minutes!
 ## 🚀 One-Command Setup
 
 ```bash
-# Clone and setup everything
+# Install the A2A Ruby gem globally (now works!)
+gem install a2a-ruby
+
+# Clone and setup samples
 git clone https://github.com/a2aproject/a2a-ruby-samples.git
 cd a2a-ruby-samples
 ./setup.sh

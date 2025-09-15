@@ -1,6 +1,6 @@
-# Dice Agent
+# 🎲 Dice Agent
 
-An interactive A2A agent that rolls dice and performs mathematical operations like checking for prime numbers. This example demonstrates function calling, interactive responses, and state management.
+An interactive A2A agent that rolls dice and performs mathematical operations like prime number checking. This sample demonstrates function calling, state management, and natural language processing with the A2A Ruby SDK.
 
 ## What This Example Demonstrates
 
@@ -23,7 +23,7 @@ An interactive A2A agent that rolls dice and performs mathematical operations li
    ruby server.rb
    ```
    
-   The server will start on `http://localhost:9999`
+   The server will start on `http://localhost:10101`
 
 3. **Test with the client:**
    ```bash
@@ -107,7 +107,7 @@ docker-compose up
 
 ### Roll a dice
 ```bash
-curl -X POST http://localhost:9999/a2a/rpc \
+curl -X POST http://localhost:10101/a2a/rpc \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -119,7 +119,7 @@ curl -X POST http://localhost:9999/a2a/rpc \
 
 ### Check prime numbers
 ```bash
-curl -X POST http://localhost:9999/a2a/rpc \
+curl -X POST http://localhost:10101/a2a/rpc \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -131,7 +131,7 @@ curl -X POST http://localhost:9999/a2a/rpc \
 
 ### Send natural language message
 ```bash
-curl -X POST http://localhost:9999/a2a/rpc \
+curl -X POST http://localhost:10101/a2a/rpc \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

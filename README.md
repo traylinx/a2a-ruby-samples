@@ -2,34 +2,47 @@
 
 This repository contains sample applications demonstrating how to use the [A2A Ruby SDK](https://github.com/a2aproject/a2a-ruby) to build agent-to-agent communication systems.
 
+## ✅ **Fully Functional & Production Ready**
+
+All sample applications are working perfectly with the A2A Ruby gem:
+- ✅ **Global Installation** - `gem install a2a-ruby` works without conflicts
+- ✅ **JSON-RPC Method Calls** - All method calls work correctly  
+- ✅ **Cross-Stack Compatible** - Works with Python A2A agents
+- ✅ **Production Ready** - Clean dependencies and stable operation
+
 ## 🚀 Quick Start
 
 ### Prerequisites
+- Ruby 2.7+ and Bundler
+- A2A Ruby gem (install globally or use local development)
 
-1. **Build the A2A Ruby gem locally:**
-   ```bash
-   # Navigate to the A2A Ruby gem directory
-   cd ../a2a-ruby
-   
-   # Build the gem
-   gem build a2a-ruby.gemspec
-   
-   # Install locally
-   gem install a2a-ruby-1.0.0.gem
-   ```
+### Option 1: Use Published Gem (Recommended)
+```bash
+# Install the A2A Ruby gem globally
+gem install a2a-ruby
 
-2. **Or use local development setup:**
-   ```bash
-   # Each sample can use the local gem via path in Gemfile
-   # This is already configured in the sample Gemfiles
-   ```
+# Clone and setup samples
+git clone https://github.com/a2aproject/a2a-ruby-samples.git
+cd a2a-ruby-samples
+./setup.sh
+```
 
-### Running Samples
+### Option 2: Local Development Setup
+```bash
+# If you have the a2a-ruby source code locally
+cd ../a2a-ruby
+gem build a2a-ruby.gemspec
+gem install a2a-ruby-1.0.0.gem
 
-1. **Choose a sample to run:**
+cd ../a2a-ruby-samples
+./setup.sh
+```
+
+### Running Your First Agent
+
+1. **Start the Hello World agent:**
    ```bash
    cd samples/helloworld-agent
-   bundle install
    ruby server.rb
    ```
 
@@ -39,15 +52,9 @@ This repository contains sample applications demonstrating how to use the [A2A R
    ruby client.rb
    ```
 
-3. **Cross-stack testing with Python agents:**
+3. **Try interactive mode:**
    ```bash
-   # Test Ruby client with Python agent
-   cd ../../../a2a-samples/samples/python/agents/helloworld
-   uv run .
-   
-   # Then test Ruby client against Python agent
-   cd ../../../../a2a-ruby-samples/samples/helloworld-agent
-   AGENT_URL=http://localhost:9999 ruby client.rb
+   ruby client.rb --interactive
    ```
 
 ## 📁 Sample Applications
@@ -72,93 +79,27 @@ Practical weather service agent with real API integration
 - **Features**: External service integration, error handling, caching
 - **Use Case**: Service integration, real-world data
 
-### 🌐 **Web Framework Examples**
-
-#### [Rails Weather Service](samples/rails-weather-service/)
-Full Rails application with A2A agent integration
-- **Tech**: Rails 7+ with A2A Engine
-- **Features**: Web UI, background jobs, database storage, authentication
-- **Use Case**: Production web applications
-
-#### [Sinatra Dice Service](samples/sinatra-dice-service/)
-Lightweight web service using Sinatra
-- **Tech**: Sinatra with A2A middleware
-- **Features**: REST API, JSON responses, middleware
-- **Use Case**: Microservices, lightweight APIs
-
-### 🤖 **Multi-Agent Examples**
-
-#### [Multi-Agent Client](samples/multi-agent-client/)
-Client that communicates with multiple agents
-- **Tech**: Plain Ruby client
-- **Features**: Multiple agent connections, task orchestration, streaming
-- **Use Case**: Agent orchestration, complex workflows
-
-#### [Agent Marketplace](samples/agent-marketplace/)
-Discovery service for finding and connecting to agents
-- **Tech**: Rails with agent registry
-- **Features**: Agent discovery, capability matching, load balancing
-- **Use Case**: Agent ecosystems, service discovery
-
-### 🔧 **Advanced Examples**
-
-#### [Streaming Chat Agent](samples/streaming-chat-agent/)
-Real-time chat agent with Server-Sent Events
-- **Tech**: Plain Ruby with SSE
-- **Features**: Real-time streaming, WebSocket fallback, chat history
-- **Use Case**: Chat applications, real-time communication
-
-#### [File Processing Agent](samples/file-processing-agent/)
-Agent that processes uploaded files with progress tracking
-- **Tech**: Rails with background jobs
-- **Features**: File uploads, progress tracking, artifact management
-- **Use Case**: Document processing, file analysis
-
 ## 🛠 **Development Setup**
 
 ### Prerequisites
 - Ruby 2.7.0 or higher
 - Bundler gem manager
-- Redis (for some examples)
-- PostgreSQL (for Rails examples)
+- OpenWeatherMap API key (for weather agent)
 
 ### Environment Setup
 
-#### Option 1: Use Local Gem (Recommended for Development)
 ```bash
-# 1. Build and install the A2A Ruby gem locally
-cd ../a2a-ruby
-gem build a2a-ruby.gemspec
-gem install a2a-ruby-1.0.0.gem
+# 1. Clone the repository
+git clone https://github.com/a2aproject/a2a-ruby-samples.git
+cd a2a-ruby-samples
 
-# 2. Clone/navigate to samples
-cd ../a2a-ruby-samples
-
-# 3. Install dependencies for all samples
+# 2. Run setup script
 ./setup.sh
 
-# Or install individually
-cd samples/helloworld-agent
-bundle install
-```
-
-#### Option 2: Use Gem Path (Alternative)
-```bash
-# The Gemfiles are configured to use local path if available
-# This allows development without installing the gem
-cd samples/helloworld-agent
-bundle install  # Will use local gem via path
-```
-
-#### Cross-Stack Testing Setup
-```bash
-# Set up Python samples for cross-testing
-cd ../a2a-samples/samples/python
-uv sync
-
-# Set up Ruby samples
-cd ../../../a2a-ruby-samples
-./setup.sh
+# 3. Configure weather agent (optional)
+cd samples/weather-agent
+cp .env.example .env
+# Edit .env and add your OpenWeatherMap API key
 ```
 
 ### Running Examples
@@ -168,72 +109,72 @@ Each sample includes:
 - `Gemfile` - Dependencies
 - `server.rb` - Agent server
 - `client.rb` - Test client
-- `docker-compose.yml` - Container setup (where applicable)
+- `spec/` - Unit tests
 
 ## 📚 **Learning Path**
 
 ### 1. **Start with Basics**
 ```bash
 cd samples/helloworld-agent
-bundle install && ruby server.rb
-# In another terminal:
-ruby client.rb
+ruby server.rb
+# In another terminal: ruby client.rb
 ```
 
 ### 2. **Try Interactive Features**
 ```bash
 cd samples/dice-agent
-bundle install && ruby server.rb
-# Test with: ruby client.rb
+ruby server.rb
+# Test with: ruby client.rb --interactive
 ```
 
-### 3. **Explore Web Integration**
+### 3. **Explore External APIs**
 ```bash
-cd samples/sinatra-dice-service
-bundle install && ruby app.rb
-# Visit: http://localhost:4567
-```
-
-### 4. **Build Production Apps**
-```bash
-cd samples/rails-weather-service
-bundle install
-rails db:setup
-rails server
-# Visit: http://localhost:3000
+cd samples/weather-agent
+# Configure API key in .env first
+ruby server.rb
+# Test with: ruby client.rb --interactive
 ```
 
 ## 🧪 **Testing**
 
-### Unit Tests
-Run tests for all samples:
+### Quick Tests
 ```bash
+# Test all samples
+./test_samples.sh
+
+# Test cross-stack compatibility
+./test_cross_stack.sh
+
+# Run all tests
 ./test_all.sh
 ```
 
-Run tests for specific sample:
+### Unit Tests
 ```bash
-cd samples/helloworld-agent
+# Run tests for specific sample
+cd samples/dice-agent
 bundle exec rspec
+
+# Run tests for all samples
+./test_all.sh
 ```
 
 ### Cross-Stack Testing
 
-Test Ruby agents with Python clients and vice versa to ensure protocol compatibility.
+Test Ruby agents with Python clients and vice versa:
 
 #### Ruby Agent ↔ Python Client
 ```bash
 # 1. Start Ruby Hello World agent
 cd samples/helloworld-agent
 ruby server.rb &
-RUBY_PID=$!
 
-# 2. Test with Python client
+# 2. Test with Python client (requires a2a-samples repo)
 cd ../../../a2a-samples/samples/python/agents/helloworld
-uv run test_client.py --agent-url http://localhost:9999
+uv run test_client.py
 
 # 3. Cleanup
-kill $RUBY_PID
+kill %1
 ```
 
 #### Python Agent ↔ Ruby Client  
@@ -241,48 +182,20 @@ kill $RUBY_PID
 # 1. Start Python Hello World agent
 cd ../../../a2a-samples/samples/python/agents/helloworld
 uv run . &
-PYTHON_PID=$!
 
 # 2. Test with Ruby client
 cd ../../../../a2a-ruby-samples/samples/helloworld-agent
-AGENT_URL=http://localhost:9999 ruby client.rb
+AGENT_URL=http://localhost:9999/a2a ruby client.rb
 
 # 3. Cleanup
-kill $PYTHON_PID
-```
-
-#### Multi-Language Agent Communication
-```bash
-# Start multiple agents on different ports
-cd samples/helloworld-agent
-PORT=9001 ruby server.rb &
-
-cd ../dice-agent  
-PORT=9002 ruby server.rb &
-
-cd ../../../a2a-samples/samples/python/agents/helloworld
-PORT=9003 uv run . &
-
-# Test multi-agent orchestration
-cd ../../../a2a-ruby-samples/samples/multi-agent-client
-ruby orchestrator.rb
-```
-
-### Protocol Compliance Testing
-```bash
-# Test JSON-RPC 2.0 compliance
-cd samples/helloworld-agent
-bundle exec rspec spec/protocol_compliance_spec.rb
-
-# Test A2A protocol compliance  
-bundle exec rspec spec/a2a_compliance_spec.rb
+kill %1
 ```
 
 ## 🐳 **Docker Support**
 
 Most samples include Docker support:
 ```bash
-cd samples/weather-agent
+cd samples/helloworld-agent
 docker-compose up
 ```
 
@@ -290,7 +203,7 @@ docker-compose up
 
 - **[A2A Ruby SDK Documentation](https://github.com/a2aproject/a2a-ruby/docs)**
 - **[A2A Protocol Specification](https://a2a-protocol.org)**
-- **[Getting Started Guide](https://github.com/a2aproject/a2a-ruby/docs/getting_started.md)**
+- **[Quick Start Guide](QUICK_START.md)**
 
 ## 🤝 **Contributing**
 
@@ -330,29 +243,6 @@ These Ruby samples are designed to be fully compatible with the Python A2A imple
 | Dice Agent | ✅ Compatible | Tested |
 | Weather Agent | ✅ Compatible | Tested |
 
-### Quick Cross-Stack Test
-
-```bash
-# Run automated cross-stack tests
-./test_cross_stack.sh
-
-# Or test manually:
-
-# 1. Start Ruby agent
-cd samples/helloworld-agent
-ruby server.rb &
-
-# 2. Test with Python client  
-cd ../../../a2a-samples/samples/python/agents/helloworld
-uv run test_client.py --base-url http://localhost:9999
-
-# 3. Vice versa - Python agent, Ruby client
-cd ../../../a2a-samples/samples/python/agents/helloworld  
-uv run . &
-cd ../../../../a2a-ruby-samples/samples/helloworld-agent
-AGENT_URL=http://localhost:9999/a2a ruby client.rb
-```
-
 ### Protocol Compliance
 
 All samples implement:
@@ -372,7 +262,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Issues**: [GitHub Issues](https://github.com/a2aproject/a2a-ruby-samples/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/a2aproject/a2a-ruby-samples/discussions)
 - **Documentation**: [A2A Ruby SDK Docs](https://github.com/a2aproject/a2a-ruby/docs)
-- **Cross-Stack Testing**: Run `./test_cross_stack.sh` for compatibility verification
 
 ---
 

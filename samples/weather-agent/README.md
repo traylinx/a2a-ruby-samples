@@ -1,6 +1,6 @@
-# Weather Agent
+# 🌤️ Weather Agent
 
-A practical A2A agent that provides weather information by integrating with external weather APIs. This example demonstrates real-world service integration, error handling, and caching.
+A comprehensive weather information agent that integrates with the OpenWeatherMap API. This sample demonstrates external API integration, error handling, caching, and natural language processing with the A2A Ruby SDK.
 
 ## What This Example Demonstrates
 

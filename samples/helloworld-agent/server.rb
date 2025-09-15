@@ -11,20 +11,18 @@ require "json"
 class HelloWorldAgent
   include A2A::Server::Agent
 
-  # Define agent skills for the agent card
-  a2a_skill "greeting" do |skill|
-    skill.description = "Simple greeting functionality that responds with hello messages"
-    skill.tags = %w[greeting hello basic demo]
-    skill.examples = [
-      "Hello there!",
-      "Say hello",
-      "Greet me"
-    ]
+  # Define A2A capabilities
+  a2a_capability "greeting" do
+    method "greet"
+    description "Simple greeting functionality that responds with hello messages"
+    tags ["greeting", "hello", "basic", "demo"]
+    input_schema type: "object", properties: { name: { type: "string" } }
+    output_schema type: "object", properties: { message: { type: "string" }, timestamp: { type: "string" } }
   end
 
   # Define the main A2A method
   a2a_method "greet" do |params|
-    name = params[:name] || "World"
+    name = params[:name] || params["name"] || "World"
     {
       message: "Hello #{name}!",
       timestamp: Time.now.utc.iso8601,
@@ -34,19 +32,55 @@ class HelloWorldAgent
 
   # Handle generic message sending
   a2a_method "message/send" do |params|
-    message = params[:message]
-    user_text = message[:parts]&.first&.dig(:text) || "there"
+    message = params[:message] || params["message"]
+    user_text = if message.is_a?(Hash)
+                  message[:parts]&.first&.dig(:text) || 
+                  message["parts"]&.first&.dig("text") || 
+                  "there"
+                else
+                  "there"
+                end
 
-    # Create response message
-    A2A::Types::Message.new(
+    # Create simple response hash (A2A gem will handle message formatting)
+    {
       message_id: SecureRandom.uuid,
-      role: "agent",
+      role: "agent", 
       parts: [
-        A2A::Types::TextPart.new(
+        {
+          kind: "text",
           text: "Hello World! You said: '#{user_text}'"
-        )
+        }
       ]
+    }
+  end
+
+  # Generate agent card
+  def generate_agent_card(_context = nil)
+    A2A::Types::AgentCard.new(
+      name: "Hello World Agent",
+      description: "A simple greeting agent that demonstrates A2A protocol basics",
+      version: "1.0.0",
+      url: "http://localhost:9999",
+      preferred_transport: "JSONRPC",
+      default_input_modes: ["text"],
+      default_output_modes: ["text"],
+      capabilities: A2A::Types::AgentCapabilities.new(streaming: false),
+      skills: generate_skills_from_capabilities
     )
+  end
+
+  private
+
+  def generate_skills_from_capabilities
+    self.class._a2a_capabilities.all.map do |capability|
+      A2A::Types::AgentSkill.new(
+        id: capability.name,
+        name: capability.name.capitalize,
+        description: capability.description,
+        tags: capability.tags || [],
+        examples: []
+      )
+    end
   end
 end
 
