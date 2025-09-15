@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  helloworld-agent:
+    build: .
+    ports:
+      - "9999:9999"
+    environment:
+      - PORT=9999
+      - HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9999/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
