@@ -1,11 +1,11 @@
 # A2A Ruby Sample Applications
 
-This repository contains sample applications demonstrating how to use the [A2A Ruby SDK](https://github.com/a2aproject/a2a-ruby) to build agent-to-agent communication systems.
+This repository contains sample applications demonstrating how to use the [A2A Ruby SDK](https://github.com/traylinx/a2a-ruby) to build agent-to-agent communication systems.
 
 ## ✅ **Fully Functional & Production Ready**
 
 All sample applications are working perfectly with the A2A Ruby gem:
-- ✅ **Global Installation** - `gem install a2a-ruby` works without conflicts
+- ✅ **GitHub Installation** - Uses latest development version from GitHub
 - ✅ **JSON-RPC Method Calls** - All method calls work correctly  
 - ✅ **Cross-Stack Compatible** - Works with Python A2A agents
 - ✅ **Production Ready** - Clean dependencies and stable operation
@@ -14,29 +14,17 @@ All sample applications are working perfectly with the A2A Ruby gem:
 
 ### Prerequisites
 - Ruby 2.7+ and Bundler
-- A2A Ruby gem (install globally or use local development)
+- Git (for cloning repositories)
 
-### Option 1: Use Published Gem (Recommended)
+### Setup
 ```bash
-# Install the A2A Ruby gem globally
-gem install a2a-ruby
-
 # Clone and setup samples
 git clone https://github.com/traylinx/a2a-ruby-samples.git
 cd a2a-ruby-samples
 ./setup.sh
 ```
 
-### Option 2: Local Development Setup
-```bash
-# If you have the a2a-ruby source code locally
-cd ../a2a-ruby
-gem build a2a-ruby.gemspec
-gem install a2a-ruby-1.0.0.gem
-
-cd ../a2a-ruby-samples
-./setup.sh
-```
+The samples use the A2A Ruby gem directly from GitHub repository, so no separate gem installation is needed. Bundler will handle all dependencies automatically.
 
 ### Running Your First Agent
 
@@ -201,7 +189,7 @@ docker-compose up
 
 ## 📖 **Documentation**
 
-- **[A2A Ruby SDK Documentation](https://github.com/a2aproject/a2a-ruby/docs)**
+- **[A2A Ruby SDK Documentation](https://github.com/traylinx/a2a-ruby/docs)**
 - **[A2A Protocol Specification](https://a2a-protocol.org)**
 - **[Quick Start Guide](QUICK_START.md)**
 
@@ -261,7 +249,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Issues**: [GitHub Issues](https://github.com/traylinx/a2a-ruby-samples/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/traylinx/a2a-ruby-samples/discussions)
-- **Documentation**: [A2A Ruby SDK Docs](https://github.com/a2aproject/a2a-ruby/docs)
+- **Documentation**: [A2A Ruby SDK Docs](https://github.com/traylinx/a2a-ruby/docs)
 
 ---
 

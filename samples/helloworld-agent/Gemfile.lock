@@ -1,5 +1,6 @@
-PATH
-  remote: ../../../a2a-ruby
+GIT
+  remote: https://github.com/traylinx/a2a-ruby.git
+  revision: 62267d71b566aa0d6e793eab13d0a2df37c175ba
   specs:
     a2a-ruby (1.0.0)
       activesupport (>= 6.0, < 8.0)
@@ -66,7 +67,7 @@ GEM
     public_suffix (6.0.2)
     puma (6.6.1)
       nio4r (~> 2.0)
-    rack (3.1.16)
+    rack (3.2.1)
     redis (5.4.1)
       redis-client (>= 0.22.0)
     redis-client (0.25.3)
@@ -95,14 +96,8 @@ GEM
       hashdiff (>= 0.4.0, < 2.0.0)
 
 PLATFORMS
-  aarch64-linux-gnu
-  aarch64-linux-musl
-  arm-linux-gnu
-  arm-linux-musl
-  arm64-darwin
-  x86_64-darwin
-  x86_64-linux-gnu
-  x86_64-linux-musl
+  ruby
+  x86_64-darwin-23
 
 DEPENDENCIES
   a2a-ruby!

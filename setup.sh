@@ -17,28 +17,8 @@ if ! command -v bundle &> /dev/null; then
     gem install bundler
 fi
 
-# Check if A2A Ruby gem is available
-if ! gem list a2a-ruby | grep -q a2a-ruby; then
-    echo "📦 A2A Ruby gem not found. Building from local source..."
-    
-    if [ -d "../a2a-ruby" ]; then
-        cd ../a2a-ruby
-        echo "🔨 Building gem..."
-        gem build a2a-ruby.gemspec
-        
-        echo "💎 Installing gem locally..."
-        gem install a2a-ruby-*.gem
-        
-        cd ../a2a-ruby-samples
-        echo "✅ A2A Ruby gem installed successfully"
-    else
-        echo "❌ A2A Ruby source not found at ../a2a-ruby"
-        echo "Please ensure the a2a-ruby directory is at the same level as a2a-ruby-samples"
-        exit 1
-    fi
-else
-    echo "✅ A2A Ruby gem already installed"
-fi
+# A2A Ruby gem will be installed from GitHub via Bundler
+echo "📦 A2A Ruby gem will be installed from GitHub repository via Bundler"
 
 # Install dependencies for all samples
 echo "📚 Installing dependencies for all samples..."

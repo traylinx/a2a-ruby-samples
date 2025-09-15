@@ -2,8 +2,8 @@
 
 source "https://rubygems.org"
 
-# A2A Ruby SDK - use local development version
-gem "a2a-ruby", path: "../../../a2a-ruby"
+# A2A Ruby SDK - use GitHub repository
+gem "a2a-ruby", git: "https://github.com/traylinx/a2a-ruby.git"
 
 # Web server
 gem "puma", "~> 6.0"

@@ -5,14 +5,13 @@ Get up and running with A2A Ruby samples in 5 minutes!
 ## 🚀 One-Command Setup
 
 ```bash
-# Install the A2A Ruby gem globally (now works!)
-gem install a2a-ruby
-
-# Clone and setup samples
+# Clone and setup samples (includes A2A Ruby gem from GitHub)
 git clone https://github.com/traylinx/a2a-ruby-samples.git
 cd a2a-ruby-samples
 ./setup.sh
 ```
+
+The samples use the A2A Ruby gem directly from GitHub, so no separate installation is needed!
 
 ## 🎯 Try Your First Agent
 
@@ -143,7 +142,7 @@ Rack::Handler::Puma.run(app, Port: 9999)
 
 ## 📚 Learn More
 
-- [A2A Ruby SDK Documentation](../a2a-ruby/docs/)
+- [A2A Ruby SDK Documentation](https://github.com/traylinx/a2a-ruby/docs/)
 - [A2A Protocol Specification](https://a2a-protocol.org)
 - [Sample Applications Guide](README.md)
 

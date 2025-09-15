@@ -5,7 +5,19 @@ All notable changes to the A2A Ruby Samples project will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2024-12-15
+## [1.1.0] - 2024-12-15
+
+### Changed
+- **Updated gem source**: Now uses A2A Ruby gem directly from GitHub repository (`https://github.com/traylinx/a2a-ruby.git`)
+- **Simplified setup**: No need for separate gem installation, Bundler handles everything
+- **Updated documentation**: Reflects new GitHub-based installation process
+
+### Technical Details
+- All Gemfiles now reference `git: "https://github.com/traylinx/a2a-ruby.git"`
+- Setup script simplified to work with GitHub gem source
+- Documentation updated to reflect new installation process
+
+## [1.0.0] - 2025-09-15
 
 ### Added
 - **Hello World Agent**: Basic A2A agent implementation with simple greeting functionality
