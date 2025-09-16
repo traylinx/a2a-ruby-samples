@@ -1,7 +1,5 @@
-GIT
-  remote: https://github.com/traylinx/a2a-ruby.git
-  revision: 05ac35b5109230fad00e40ee4800c12ea7d78bda
-  branch: main
+GEM
+  remote: https://rubygems.org/
   specs:
     a2a-ruby (1.0.0)
       activesupport (>= 6.0, < 8.0)
@@ -11,10 +9,6 @@ GIT
       puma (>= 5.0, < 7.0)
       rack (>= 2.0, < 4.0)
       redis (>= 4.0, < 6.0)
-
-GEM
-  remote: https://rubygems.org/
-  specs:
     activesupport (7.2.2.2)
       base64
       benchmark (>= 0.3)
@@ -103,7 +97,7 @@ PLATFORMS
   x86_64-darwin-23
 
 DEPENDENCIES
-  a2a-ruby!
+  a2a-ruby (~> 1.0)
   oj (~> 3.16)
   pry (~> 0.14)
   puma (~> 6.0)

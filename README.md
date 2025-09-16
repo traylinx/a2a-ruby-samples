@@ -25,8 +25,8 @@ The **a2a-ruby gem** provides:
 
 ## ✅ **Fully Functional & Production Ready**
 
-All sample applications are working perfectly with the A2A Ruby gem:
-- ✅ **GitHub Installation** - Uses latest development version from GitHub
+All sample applications are working perfectly with the published A2A Ruby gem:
+- ✅ **Published Gem** - Uses stable v1.0.0 release from RubyGems.org
 - ✅ **JSON-RPC Method Calls** - All method calls work correctly  
 - ✅ **Cross-Stack Compatible** - Works with Python A2A agents
 - ✅ **Production Ready** - Clean dependencies and stable operation
@@ -45,7 +45,7 @@ cd a2a-ruby-samples
 ./setup.sh
 ```
 
-The samples use the A2A Ruby gem directly from GitHub repository, so no separate gem installation is needed. Bundler will handle all dependencies automatically.
+The samples use the published A2A Ruby gem from RubyGems.org, so no separate gem installation is needed. Bundler will handle all dependencies automatically.
 
 ### Running Your First Agent
 
