@@ -69,22 +69,29 @@ class DiceAgentA2A
 
   # Handle generic message sending
   a2a_method "message/send" do |params|
-    message = params[:message]
-    user_text = message[:parts]&.first&.dig(:text) || ""
+    message = params[:message] || params["message"]
+    user_text = if message.is_a?(Hash)
+                  message[:parts]&.first&.dig(:text) || 
+                  message["parts"]&.first&.dig("text") || 
+                  "roll dice"
+                else
+                  "roll dice"
+                end
 
     # Process the natural language input
     result = @dice_agent.process_natural_language(user_text)
 
-    # Create response message
-    A2A::Types::Message.new(
+    # Create simple response hash (A2A gem will handle message formatting)
+    {
       message_id: SecureRandom.uuid,
-      role: "agent",
+      role: "agent", 
       parts: [
-        A2A::Types::TextPart.new(
-          text: result[:message]
-        )
+        {
+          kind: "text",
+          text: result[:message] || "🎲 I can help you roll dice and check prime numbers!"
+        }
       ]
-    )
+    }
   end
 
   # Generate agent card
@@ -162,9 +169,8 @@ class DiceAgentApp
 
     begin
       body = request.body.read
-      json_request = A2A::Protocol::JsonRpc.parse_request(body)
-
-      response = @handler.handle_request(json_request)
+      
+      response = @handler.handle_request(body)
 
       [
         200,
@@ -172,7 +178,7 @@ class DiceAgentApp
           "Content-Type" => "application/json",
           "Access-Control-Allow-Origin" => "*"
         },
-        [response.to_json]
+        [response]
       ]
     rescue A2A::Errors::A2AError => e
       error_response(400, e.message, e.to_json_rpc_error)

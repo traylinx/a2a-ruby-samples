@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/traylinx/a2a-ruby.git
-  revision: 62267d71b566aa0d6e793eab13d0a2df37c175ba
+  revision: 05ac35b5109230fad00e40ee4800c12ea7d78bda
+  branch: main
   specs:
     a2a-ruby (1.0.0)
       activesupport (>= 6.0, < 8.0)

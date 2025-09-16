@@ -6,6 +6,7 @@ require "a2a"
 require "puma"
 require "rack"
 require "json"
+require "securerandom"
 require "dotenv/load"
 require_relative "weather_agent"
 
@@ -67,60 +68,179 @@ class WeatherAgentA2A
 
   # Define A2A methods
   a2a_method "get_current_weather" do |params|
-    location = params[:location] || params[:city]
-    units = params[:units] || "metric"
+    # Handle case where params might be nil or not a hash
+    params = {} unless params.is_a?(Hash)
     
-    return { error: "Location is required" } unless location
+    location = params[:location] || params["location"] || params[:city] || params["city"]
+    units = params[:units] || params["units"] || "metric"
     
-    @weather_agent.get_current_weather(location, units)
+    next { error: "Location is required" } unless location && !location.to_s.strip.empty?
+    
+    begin
+      result = @weather_agent.get_current_weather(location, units)
+      
+      if result[:success]
+        # Return a simple, serializable response
+        {
+          success: true,
+          location: result[:location][:name],
+          country: result[:location][:country],
+          temperature: result[:weather][:temperature],
+          feels_like: result[:weather][:feels_like],
+          condition: result[:weather][:condition],
+          humidity: result[:weather][:humidity],
+          wind_speed: result[:weather][:wind_speed],
+          units: result[:units][:temperature],
+          timestamp: result[:timestamp]
+        }
+      else
+        { error: result[:error] || "Weather data unavailable" }
+      end
+    rescue => e
+      { error: "Error: #{e.message}" }
+    end
   end
 
   a2a_method "get_forecast" do |params|
-    location = params[:location] || params[:city]
-    days = params[:days] || 5
-    units = params[:units] || "metric"
+    # Handle case where params might be nil or not a hash
+    params = {} unless params.is_a?(Hash)
     
-    return { error: "Location is required" } unless location
+    location = params[:location] || params["location"] || params[:city] || params["city"]
+    days = params[:days] || params["days"] || 5
+    units = params[:units] || params["units"] || "metric"
     
-    @weather_agent.get_forecast(location, days, units)
+    next { error: "Location is required" } unless location && !location.to_s.strip.empty?
+    
+    begin
+      result = @weather_agent.get_forecast(location, days, units)
+      
+      if result[:success]
+        # Return a simple, serializable response
+        forecast_data = result[:forecast].map do |day|
+          {
+            date: day[:date],
+            min_temp: day[:temperature][:min],
+            max_temp: day[:temperature][:max],
+            avg_temp: day[:temperature][:avg],
+            condition: day[:condition],
+            humidity: day[:humidity],
+            precipitation: day[:precipitation]
+          }
+        end
+        
+        {
+          success: true,
+          location: result[:location][:name],
+          country: result[:location][:country],
+          forecast: forecast_data,
+          days: result[:days],
+          units: result[:units][:temperature],
+          timestamp: result[:timestamp]
+        }
+      else
+        { error: result[:error] || "Forecast data unavailable" }
+      end
+    rescue => e
+      { error: "Error: #{e.message}" }
+    end
   end
 
   a2a_method "get_weather_by_coordinates" do |params|
-    lat = params[:latitude] || params[:lat]
-    lon = params[:longitude] || params[:lon]
+    # Handle case where params might be nil or not a hash
+    params = {} unless params.is_a?(Hash)
+    
+    lat = params[:latitude] || params["latitude"] || params[:lat] || params["lat"]
+    lon = params[:longitude] || params["longitude"] || params[:lon] || params["lon"]
     units = params[:units] || "metric"
     
-    return { error: "Latitude and longitude are required" } unless lat && lon
+    next { error: "Latitude and longitude are required" } unless lat && lon
     
-    @weather_agent.get_weather_by_coordinates(lat, lon, units)
+    begin
+      result = @weather_agent.get_weather_by_coordinates(lat, lon, units)
+      
+      if result[:success]
+        # Return a simple, serializable response
+        {
+          success: true,
+          location: result[:location],
+          weather: result[:weather],
+          units: result[:units],
+          timestamp: result[:timestamp]
+        }
+      else
+        {
+          error: result[:error] || "Failed to get weather data",
+          success: false,
+          coordinates: { lat: lat, lon: lon }
+        }
+      end
+    rescue => e
+      {
+        error: "Internal error: #{e.message}",
+        success: false,
+        coordinates: { lat: lat, lon: lon }
+      }
+    end
   end
 
   a2a_method "search_cities" do |params|
-    query = params[:query] || params[:city] || params[:location]
+    # Handle case where params might be nil or not a hash
+    params = {} unless params.is_a?(Hash)
     
-    return { error: "Search query is required" } unless query
+    query = params[:query] || params["query"] || params[:city] || params["city"] || params[:location] || params["location"]
+    limit = params[:limit] || 5
     
-    @weather_agent.search_cities(query)
+    next { error: "Search query is required" } unless query && !query.to_s.strip.empty?
+    
+    begin
+      result = @weather_agent.search_cities(query)
+      
+      if result[:success]
+        # Return a simple, serializable response
+        {
+          success: true,
+          cities: result[:cities],
+          query: result[:query],
+          timestamp: result[:timestamp]
+        }
+      else
+        {
+          error: result[:error] || "Failed to search cities",
+          success: false,
+          query: query
+        }
+      end
+    rescue => e
+      {
+        error: "Internal error: #{e.message}",
+        success: false,
+        query: query
+      }
+    end
   end
 
   # Handle generic message sending
   a2a_method "message/send" do |params|
-    message = params[:message]
-    user_text = message[:parts]&.first&.dig(:text) || ""
+    # Safely extract message with proper nil handling
+    message = params[:message] || params["message"] || {}
+    
+    # Extract user text with safe navigation and proper defaults
+    user_text = extract_message_text(message)
 
     # Process the natural language input
     result = @weather_agent.process_natural_language(user_text)
 
-    # Create response message
-    A2A::Types::Message.new(
+    # Create simple response hash (A2A gem will handle message formatting)
+    {
       message_id: SecureRandom.uuid,
-      role: "agent",
+      role: "agent", 
       parts: [
-        A2A::Types::TextPart.new(
-          text: result[:message]
-        )
+        {
+          kind: "text",
+          text: result[:message] || "I can help you with weather information!"
+        }
       ]
-    )
+    }
   end
 
   # Generate agent card
@@ -139,6 +259,25 @@ class WeatherAgentA2A
   end
 
   private
+
+  # Safely extract text from message structure with proper nil handling
+  def extract_message_text(message)
+    return "Hello" unless message.is_a?(Hash)
+    
+    # Try different possible message structures
+    parts = message[:parts] || message["parts"]
+    return "Hello" unless parts.is_a?(Array) && !parts.empty?
+    
+    first_part = parts.first
+    return "Hello" unless first_part.is_a?(Hash)
+    
+    # Extract text with safe navigation
+    text = first_part[:text] || first_part["text"]
+    return text.to_s if text && !text.to_s.strip.empty?
+    
+    # Default fallback
+    "Hello"
+  end
 
   def generate_skills_from_capabilities
     self.class._a2a_capabilities.all.map do |capability|
@@ -198,9 +337,8 @@ class WeatherAgentApp
 
     begin
       body = request.body.read
-      json_request = A2A::Protocol::JsonRpc.parse_request(body)
-
-      response = @handler.handle_request(json_request)
+      
+      response = @handler.handle_request(body)
 
       [
         200,
@@ -208,7 +346,7 @@ class WeatherAgentApp
           "Content-Type" => "application/json",
           "Access-Control-Allow-Origin" => "*"
         },
-        [response.to_json]
+        [response]
       ]
     rescue A2A::Errors::A2AError => e
       error_response(400, e.message, e.to_json_rpc_error)
