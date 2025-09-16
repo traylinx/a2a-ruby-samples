@@ -69,20 +69,30 @@ class WeatherAgentClient
 
     test_locations.each do |test_case|
       begin
-        response = @client.call_method("get_current_weather", {
-          location: test_case[:location],
-          units: "metric"
-        })
+        message = A2A::Types::Message.new(
+          message_id: SecureRandom.uuid,
+          role: "user",
+          parts: [
+            A2A::Types::TextPart.new(text: "Get current weather for #{test_case[:location]} in metric units")
+          ]
+        )
 
-        if response[:success]
-          weather = response[:weather]
-          location = response[:location]
-          puts "   ✅ #{test_case[:description]}:"
-          puts "      🌡️ Temperature: #{weather[:temperature]}°C (feels like #{weather[:feels_like]}°C)"
-          puts "      ☁️ Condition: #{weather[:condition]}"
-          puts "      💧 Humidity: #{weather[:humidity]}%"
+        response = @client.send_message(message)
+
+        if response.is_a?(Enumerator)
+          # Handle streaming response
+          response_text = ""
+          response.each do |chunk|
+            if chunk.is_a?(A2A::Types::Message)
+              response_text += chunk.parts.first.text
+            end
+          end
+          puts "   ✅ #{test_case[:description]}: #{response_text}"
+        elsif response.is_a?(A2A::Types::Message)
+          response_text = response.parts.first.text
+          puts "   ✅ #{test_case[:description]}: #{response_text}"
         else
-          puts "   ❌ #{test_case[:description]}: #{response[:error]}"
+          puts "   ✅ #{test_case[:description]}: #{response.inspect}"
         end
       rescue StandardError => e
         puts "   ❌ #{test_case[:description]}: Failed - #{e.message}"
@@ -95,22 +105,30 @@ class WeatherAgentClient
     puts "📅 Test 3: Getting weather forecast..."
 
     begin
-      response = @client.call_method("get_forecast", {
-        location: "Paris, France",
-        days: 3,
-        units: "metric"
-      })
+      message = A2A::Types::Message.new(
+        message_id: SecureRandom.uuid,
+        role: "user",
+        parts: [
+          A2A::Types::TextPart.new(text: "Get 3-day weather forecast for Paris, France in metric units")
+        ]
+      )
 
-      if response[:success]
-        location = response[:location]
-        forecast = response[:forecast]
-        
-        puts "   ✅ 3-day forecast for #{location[:name]}, #{location[:country]}:"
-        forecast.each do |day|
-          puts "      📆 #{day[:date]}: #{day[:temperature][:min]}-#{day[:temperature][:max]}°C, #{day[:condition]}"
+      response = @client.send_message(message)
+
+      if response.is_a?(Enumerator)
+        # Handle streaming response
+        response_text = ""
+        response.each do |chunk|
+          if chunk.is_a?(A2A::Types::Message)
+            response_text += chunk.parts.first.text
+          end
         end
+        puts "   ✅ Forecast: #{response_text}"
+      elsif response.is_a?(A2A::Types::Message)
+        response_text = response.parts.first.text
+        puts "   ✅ Forecast: #{response_text}"
       else
-        puts "   ❌ Failed: #{response[:error]}"
+        puts "   ✅ Forecast: #{response.inspect}"
       end
     rescue StandardError => e
       puts "   ❌ Failed: #{e.message}"
@@ -129,19 +147,30 @@ class WeatherAgentClient
 
     test_coords.each do |coords|
       begin
-        response = @client.call_method("get_weather_by_coordinates", {
-          latitude: coords[:lat],
-          longitude: coords[:lon],
-          units: "metric"
-        })
+        message = A2A::Types::Message.new(
+          message_id: SecureRandom.uuid,
+          role: "user",
+          parts: [
+            A2A::Types::TextPart.new(text: "Get weather for coordinates #{coords[:lat]}, #{coords[:lon]} in metric units")
+          ]
+        )
 
-        if response[:success]
-          weather = response[:weather]
-          location = response[:location]
-          puts "   ✅ #{coords[:name]} (#{coords[:lat]}, #{coords[:lon]}):"
-          puts "      🌡️ #{weather[:temperature]}°C, #{weather[:condition]}"
+        response = @client.send_message(message)
+
+        if response.is_a?(Enumerator)
+          # Handle streaming response
+          response_text = ""
+          response.each do |chunk|
+            if chunk.is_a?(A2A::Types::Message)
+              response_text += chunk.parts.first.text
+            end
+          end
+          puts "   ✅ #{coords[:name]}: #{response_text}"
+        elsif response.is_a?(A2A::Types::Message)
+          response_text = response.parts.first.text
+          puts "   ✅ #{coords[:name]}: #{response_text}"
         else
-          puts "   ❌ #{coords[:name]}: #{response[:error]}"
+          puts "   ✅ #{coords[:name]}: #{response.inspect}"
         end
       rescue StandardError => e
         puts "   ❌ #{coords[:name]}: Failed - #{e.message}"
@@ -157,15 +186,30 @@ class WeatherAgentClient
 
     search_queries.each do |query|
       begin
-        response = @client.call_method("search_cities", { query: query })
+        message = A2A::Types::Message.new(
+          message_id: SecureRandom.uuid,
+          role: "user",
+          parts: [
+            A2A::Types::TextPart.new(text: "Search for cities named #{query}")
+          ]
+        )
 
-        if response[:success]
-          puts "   ✅ Search '#{query}': Found #{response[:count]} cities"
-          response[:cities].first(3).each do |city|
-            puts "      • #{city[:display_name]}"
+        response = @client.send_message(message)
+
+        if response.is_a?(Enumerator)
+          # Handle streaming response
+          response_text = ""
+          response.each do |chunk|
+            if chunk.is_a?(A2A::Types::Message)
+              response_text += chunk.parts.first.text
+            end
           end
+          puts "   ✅ Search '#{query}': #{response_text}"
+        elsif response.is_a?(A2A::Types::Message)
+          response_text = response.parts.first.text
+          puts "   ✅ Search '#{query}': #{response_text}"
         else
-          puts "   ❌ Search '#{query}': #{response[:error]}"
+          puts "   ✅ Search '#{query}': #{response.inspect}"
         end
       rescue StandardError => e
         puts "   ❌ Search '#{query}': Failed - #{e.message}"
